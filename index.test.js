@@ -1,5 +1,7 @@
-const safeEval = require('./index');
+const fs = require('fs');
 const expect = require('chai').expect;
+
+const safeEval = require('./index');
 
 describe('safeEval', () => {
   it('evaluates with context', () => {
@@ -31,5 +33,11 @@ describe('safeEval', () => {
   })(name, age);
   `;
     expect(safeEval(expr, {name: 'Felipe', age: 12})).to.deep.equal({ name: 'Felipe', age: 12 });
+  });
+
+  it('works with expression starting with comments', () => {
+    const expr = fs.readFileSync('fixture/rule.js').toString();
+    const instance = { name: 'Felipe' };
+    expect(safeEval(expr, { instance }).name).to.eql('Felipe');
   });
 });
