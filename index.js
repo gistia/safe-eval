@@ -1,5 +1,6 @@
-module.exports = (expr, context) => {
+module.exports = (expr, context={}) => {
+  if (!expr) { return; }
   with(context) {
-    return eval(expr);
+    return eval(`(function() { return ${expr.trim()} })()`);
   }
 };
